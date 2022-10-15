@@ -10,7 +10,7 @@ router.post("/register", function (req, res) {
    // console.log(req);
 
    UserModel.register(
-      { username: req.body.username },
+      { username: req.body.username, displayName: req.body.displayName },
       req.body.password,
       (err, user) => {
          if (err) {
