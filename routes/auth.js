@@ -5,10 +5,34 @@ import { UserModel } from "../models/user.js";
 const router = express.Router();
 const CLIENT_URL = "http://localhost:3000";
 
-// Sign Up/ Sign In
-router.post("/register", function (req, res) {
-   // console.log(req);
+router.get("/login/success", (req, res) => {
+   if (req.user) {
+      res.status(200).json({
+         success: true,
+         message: "Welcome",
+         user: req.user,
+         session: req.session,
+      });
+   }
+});
 
+router.get("login/failed", (req, res) => {
+   res.status(401).json({
+      success: false,
+      message: "Could not authenticate TEXT HERE.",
+   });
+});
+
+router.get("/logout", (req, res) => {
+   req.logout((err) => {
+      if (!err) {
+         res.redirect(CLIENT_URL);
+      }
+   });
+});
+
+// Local Strategy
+router.post("/register", function (req, res) {
    UserModel.register(
       { username: req.body.username, displayName: req.body.displayName },
       req.body.password,
@@ -24,7 +48,7 @@ router.post("/register", function (req, res) {
             passport.authenticate("local")(req, res, () => {
                // console.log(req.user);
                console.log("User registed + logged in");
-               res.redirect(`${CLIENT_URL}/user/${req.user._id}`);
+               res.redirect(`${CLIENT_URL}/user`);
             });
          }
       }
@@ -44,17 +68,35 @@ router.post("/login", function (req, res) {
    req.login(loginUser, (err) => {
       if (err) {
          console.log(err);
-         res.redirect("http://localhost:3000"); // Add page here if user is not Registered. Prompt him to /register page component.
+         res.redirect("http://localhost:3000/failedtolog"); // Add page here if user is not Registered. Prompt him to /register page component.
       } else {
          // If no errors and user is successfully logged in.
          // Now use passport.authenticate() with the type of 'local'.
          // That will set up a cookie and save their current log-in session.
          passport.authenticate("local")(req, res, () => {
             console.log("userlogged in");
-            res.redirect(`${CLIENT_URL}/user/${req.user._id}`);
+            res.redirect(`${CLIENT_URL}/user`);
          });
       }
    });
 });
+
+// Google Strategy
+router.get(
+   "/google",
+   passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+   "/google/callback",
+   passport.authenticate("google", {
+      // successRedirect: `${CLIENT_URL}`,
+      failureRedirect: "/login/failed",
+   }),
+   (req, res) => {
+      console.log("Google Login from user: " + req.user.displayName);
+      res.redirect(`${CLIENT_URL}/user`);
+   }
+);
 
 export default router;
