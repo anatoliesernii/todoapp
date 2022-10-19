@@ -19,7 +19,7 @@ passport.use(
          clientID: process.env.GOOGLE_CLIENT_ID,
          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
          callbackURL:
-            "http://todoapp-anatolie.herokuapp.com/auth/google/callback",
+            "https://todoapp-anatolie.herokuapp.com/auth/google/callback",
       },
       function (accessToken, refreshToken, profile, cb) {
          UserModel.findOrCreate(
