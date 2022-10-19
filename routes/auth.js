@@ -3,7 +3,7 @@ import passport from "passport";
 import { UserModel } from "../models/user.js";
 
 const router = express.Router();
-const CLIENT_URL = "http://localhost:3000";
+const CLIENT_URL = "https://todoapp-anatolie.herokuapp.com";
 
 router.get("/login/success", (req, res) => {
    if (req.user) {
