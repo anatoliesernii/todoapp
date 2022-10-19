@@ -9,6 +9,7 @@ import session from "express-session";
 import passport from "passport";
 import { UserModel } from "./models/user.js";
 import "./passportSetup.js";
+import path from "path";
 
 import authRouter from "./routes/auth.js";
 // dummy change
