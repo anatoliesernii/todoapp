@@ -175,12 +175,12 @@ app.get("/login/failed", (req, res) => {
 //    result.lists[0].items.push({ name: "second item", status: false });
 //    // result.save();
 // });
-// app.use(express.static(path.join(__dirname, "/client/build")));
-app.use(express.static("/client/build", { root: "." }));
+app.use(express.static(path.join(__dirname, "/client/build")));
+// app.use(express.static("/client/build", { root: "." }));
 
 app.get("*", (req, res) => {
-   //   res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-   res.sendFile("index.html", { root: "./client/build" });
+   res.sendFile(path.join(__dirname, "client/build", "index.html"));
+   // res.sendFile("index.html", { root: "./client/build" });
 });
 
 app.listen(port, () => {
