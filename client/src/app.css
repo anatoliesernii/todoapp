@@ -1,0 +1,14 @@
+* {
+   padding: 0;
+   margin: 0;
+   box-sizing: border-box;
+}
+
+#root {
+   position: relative;
+   background-color: #add7f7;
+   background-image: url("../public/images/main-background.png");
+   min-height: 100vh;
+   font-family: 'Roboto', sans-serif;
+   font-weight: 400;
+}
