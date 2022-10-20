@@ -167,6 +167,7 @@ const HeaderWrapper = styled.div`
    @media (max-width: 1079px) {
       .visible-menu {
          display: block;
+         z-index: 1;
       }
 
       .hidden-menu {
