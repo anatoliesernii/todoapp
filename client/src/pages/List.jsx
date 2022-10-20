@@ -169,7 +169,7 @@ const List = (props) => {
             // Check if path == '/user/:listTitle' otherwise path is '/user'
             // And if user is loaded before trying to render his list.
             // CurrentIndex is the list location inside lists Array.
-            <ListWrapper>
+            <ListWrapper className="list-wrapper">
                <Box className="box box-title">
                   <h1>{currentPath.listTitle}</h1>
                </Box>
@@ -295,26 +295,25 @@ const ListWrapper = styled.div`
 `;
 
 const Box = styled.div`
-   min-width: 450px;
-   max-width: 500px;
+   min-width: 300px;
+   width: 100%;
+   max-width: 550px;
    text-align: center;
    margin: 40px auto;
    border-radius: 5px;
    background-color: #f5f5f5;
    box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
 
-   .box-title {
-      height: 40px !important;
-   }
-
    h1 {
       padding: 10px;
+      overflow-x: hidden;
+      width: calc(100% - 10px);
    }
 
    .item {
       display: flex;
       align-items: center;
-      height: 70px;
+      min-height: 60px;
       font-size: 20px;
       position: relative;
       border-bottom: 1px solid #bababa;
@@ -327,7 +326,15 @@ const Box = styled.div`
       p {
          font-size: 20px;
          font-weight: 200;
-         overflow-x: hidden;
+         text-align: left;
+         word-break: break-all;
+         line-height: 1.35;
+         padding: 15px 0;
+         width: 72%;
+
+         @media (min-width: 768px) {
+            width: 82%;
+         }
       }
 
       .btn {
@@ -374,12 +381,16 @@ const Box = styled.div`
 
    input[type="text"] {
       height: 50px;
-      width: 70%;
       border-color: transparent;
       background-color: #f5f5f5;
       text-align: center;
       border: none;
       font-size: 20px;
+      width: 65%;
+
+      @media (min-width: 768px) {
+         width: 75%;
+      }
    }
 
    input:checked + p {
