@@ -327,7 +327,7 @@ const Box = styled.div`
          font-size: 20px;
          font-weight: 200;
          text-align: left;
-         word-break: break-all;
+         word-break: normal;
          line-height: 1.35;
          padding: 15px 0;
          width: 72%;
