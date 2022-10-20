@@ -3,23 +3,30 @@ import styled from "styled-components";
 import { FaClipboardList } from "react-icons/fa";
 import { BsCalendarDate } from "react-icons/bs";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 import { MdAccountCircle } from "react-icons/md";
 import { MdOutlineAddToPhotos } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { GrClose } from "react-icons/gr";
+import { MdLogout } from "react-icons/md";
+import { GiOpenBook } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import ListItem from "./ListItem";
 
 const Navbar = (props) => {
-   const [expanded, setExpanded] = useState(false);
+   const [expandedLists, setExpandedLists] = useState(false);
    const openLists = () => {
-      setExpanded(!expanded);
+      setExpandedLists(!expandedLists);
    };
    const [expandedMenu, setExpandedMenu] = useState(false);
    const openMenu = () => {
       setExpandedMenu(!expandedMenu);
    };
 
+   const closeAll = () => {
+      setExpandedLists(false);
+      setExpandedMenu(false);
+   };
    const [timeNow, setTimeNow] = useState(new Date().toLocaleString());
 
    useEffect(() => {
@@ -43,10 +50,11 @@ const Navbar = (props) => {
             <FaClipboardList />
             <h1>ToDoApp</h1>
          </Logo>
-         <div className="menu-toggler" onClick={openMenu}>
-            {expandedMenu ? <GrClose /> : <GiHamburgerMenu />}
-         </div>
-
+         {props.user && (
+            <div className="menu-toggler" onClick={openMenu}>
+               {expandedMenu ? <GrClose /> : <GiHamburgerMenu />}
+            </div>
+         )}
          <Actions
             className={`actions ${
                expandedMenu ? "visible-menu" : "hidden-menu"
@@ -54,57 +62,67 @@ const Navbar = (props) => {
          >
             {props.user && (
                <>
-                  <CurrentList className="action">
+                  <Timer className="timer action">
                      <BsCalendarDate />
                      <span>{timeNow}</span>
-                  </CurrentList>
+                  </Timer>
 
-                  <Lists className="action" onClick={openLists}>
-                     <span>My Lists</span>
-                     <MdOutlineKeyboardArrowDown />
-                     {expanded ? (
-                        <ListsBucket className="listbucket">
-                           {props.lists.length === 0 ? (
-                              <>
-                                 {props.user.lists.map((list, index) => {
-                                    return (
-                                       <ListItem
-                                          key={index}
-                                          user={props.user}
-                                          list={list}
-                                          setLists={props.setLists}
-                                       />
-                                    );
-                                 })}
-                              </>
-                           ) : (
-                              <>
-                                 {props.lists.map((list, index) => {
-                                    return (
-                                       <ListItem
-                                          key={index}
-                                          user={props.user}
-                                          list={list}
-                                          setLists={props.setLists}
-                                       />
-                                    );
-                                 })}
-                              </>
-                           )}
+                  <Lists className="lists action" onClick={openLists}>
+                     <span>
+                        <GiOpenBook />
+                        My Lists
+                        {expandedLists ? (
+                           <MdOutlineKeyboardArrowUp />
+                        ) : (
+                           <MdOutlineKeyboardArrowDown />
+                        )}
+                     </span>
 
-                           <li>
-                              <Link to={"/user"}>
-                                 <MdOutlineAddToPhotos />
-                                 <span>Add List</span>
-                              </Link>
-                           </li>
-                        </ListsBucket>
-                     ) : (
-                        " "
-                     )}
+                     <ListsBucket
+                        className={`listbucket ${
+                           expandedLists ? "visible-lists" : "hidden-lists"
+                        }`}
+                     >
+                        {props.lists.length === 0 ? (
+                           <>
+                              {props.user.lists.map((list, index) => {
+                                 return (
+                                    <ListItem
+                                       key={index}
+                                       user={props.user}
+                                       list={list}
+                                       setLists={props.setLists}
+                                       closeAll={closeAll}
+                                    />
+                                 );
+                              })}
+                           </>
+                        ) : (
+                           <>
+                              {props.lists.map((list, index) => {
+                                 return (
+                                    <ListItem
+                                       key={index}
+                                       user={props.user}
+                                       list={list}
+                                       setLists={props.setLists}
+                                       closeAll={closeAll}
+                                    />
+                                 );
+                              })}
+                           </>
+                        )}
+
+                        <li className="list-new-item" onClick={closeAll}>
+                           <Link to={"/user"}>
+                              <MdOutlineAddToPhotos />
+                              <span>Add List</span>
+                           </Link>
+                        </li>
+                     </ListsBucket>
                   </Lists>
 
-                  <li className="user-info">
+                  <li className="user-info action">
                      {props.user.googleImg ? (
                         <img alt="" src={props.user.googleImg} />
                      ) : (
@@ -115,7 +133,8 @@ const Navbar = (props) => {
                      {props.user.displayName}
                   </li>
 
-                  <Logout className="action" onClick={logout}>
+                  <Logout className=" logout action" onClick={logout}>
+                     <MdLogout />
                      <span>Logout</span>
                   </Logout>
                </>
@@ -126,7 +145,7 @@ const Navbar = (props) => {
 };
 
 const HeaderWrapper = styled.div`
-   background-color: #fff;
+   background-color: #fdfdfe;
    display: flex;
    align-items: center;
    justify-content: space-between;
@@ -140,12 +159,12 @@ const HeaderWrapper = styled.div`
          color: #282828;
       }
 
-      @media (max-width: 1023px) {
+      @media (max-width: 1079px) {
          display: flex;
       }
    }
 
-   @media (max-width: 1023px) {
+   @media (max-width: 1079px) {
       .visible-menu {
          display: block;
       }
@@ -174,49 +193,84 @@ const Actions = styled.ul`
    font-weight: 500;
 
    li {
-      margin-left: 30px;
+      list-style: none;
    }
 
-   @media (max-width: 1023px) {
-      position: absolute;
-      background-color: #fdfdfd;
-      flex-direction: column;
-      top: 0;
-      left: 0;
-      margin-top: 60px;
-      width: 100%;
-
-      li {
-         height: 45px;
-         border-top: 2px solid lightgray;
-         width: 100%;
-         padding-left: 10px;
-         margin: 0;
-      }
+   .visible-lists {
+      display: block;
    }
+
+   .hidden-lists {
+      display: none;
+   }
+
+   background-color: white;
+   position: absolute;
+   top: 60px;
+   left: 0;
+   width: 100%;
 
    .action {
       display: flex;
       align-items: center;
-      gap: 5px;
+      padding: 10px 16px;
+
+      border-top: 2px solid lightgray;
+
+      :last-child {
+         /* border-bottom: 2px solid lightgray; */
+      }
+
+      span {
+         display: flex;
+         align-items: center;
+      }
+      :nth-child(2) {
+         flex-direction: column;
+         justify-content: center;
+         align-items: flex-start;
+      }
+
+      svg {
+         /* margin-right: 5px; */
+         font-size: 30px;
+         min-width: 30px;
+      }
    }
 
-   .user-info {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      img {
-         height: 40px;
-         width: 40px;
-         border-radius: 100%;
-      }
+   .timer,
+   .user-info,
+   .logout {
       svg {
-         font-size: 35px;
+         margin-right: 5px;
+      }
+   }
+
+   @media (min-width: 1080px) {
+      position: relative;
+      top: 0;
+      justify-content: flex-end;
+
+      .action {
+         border: 0;
+      }
+
+      .lists {
+         position: relative;
+      }
+      .listbucket {
+         background-color: white;
+         position: absolute;
+         top: 50px;
+         left: 0;
+         padding: 2px 7px;
+         border-radius: 3px;
+         min-width: 330px;
       }
    }
 `;
 
-const CurrentList = styled.li`
+const Timer = styled.li`
    svg {
       color: green;
       font-size: 17px;
@@ -224,58 +278,47 @@ const CurrentList = styled.li`
 `;
 
 const Lists = styled.li`
-   position: relative;
    cursor: pointer;
+
+   span svg {
+      margin-right: 5px;
+   }
 `;
 
 const ListsBucket = styled.ul`
-   background-color: white;
-   list-style: none;
-   display: flex;
-   flex-direction: column;
-
-   width: 250px;
-   position: absolute;
-   top: 55px;
-   left: 0;
-   border-radius: 5px;
-   padding: 12px;
-   gap: 8px;
-   font-size: 19px;
-   z-index: 5;
+   width: 100%;
 
    li {
-      position: relative;
-   }
-
-   a {
-      color: #353333;
       display: flex;
       align-items: center;
-      text-decoration: none;
-      padding: 4px 2px;
-      background-color: #dddddd6e;
-      border-radius: 3px;
+      background-color: #ebebeb;
+      padding: 4px 4px 4px 2px;
+      margin: 5px 0;
+      border-radius: 4px;
 
-      svg {
-         font-size: 18px;
-         margin: 0 5px;
+      .delete {
+         margin: 0 0 0 auto;
       }
    }
 
-   .delete {
-      position: absolute;
-      top: 5px;
-      right: 5px;
+   li a {
+      color: black;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      overflow-x: hidden;
+
+      svg {
+         margin-right: 5px;
+      }
    }
 `;
 
 const Logout = styled.li`
-   color: black;
-   text-decoration: none;
    cursor: pointer;
    svg {
       font-size: 23px;
+      color: red;
    }
 `;
 

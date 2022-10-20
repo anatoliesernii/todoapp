@@ -41,7 +41,7 @@ const ListItem = (props) => {
    };
 
    return (
-      <li>
+      <li className="list-item" onClick={props.closeAll}>
          <Link to={`/user/${props.list.title}`}>
             <IoIosArrowForward />
             <span>{props.list.title}</span>

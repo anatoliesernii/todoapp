@@ -20,7 +20,7 @@ const FooterWrapper = styled.footer`
    padding: 10px 0;
    text-align: center;
    color: black;
-   background-color: white;
+   background-color: #fdfdfe;
 `;
 
 export default Footer;

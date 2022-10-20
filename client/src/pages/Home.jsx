@@ -105,12 +105,7 @@ const HomeWrapper = styled.div`
    display: flex;
    justify-content: center;
    text-align: center;
-   padding: 100px 10px 100px 10px;
-
-   @media (min-width: 768px) {
-      padding: 100px 10px 0 10px;
-      bottom: 0;
-   }
+   padding: 100px 10px 150px 10px;
 
    .container {
       background-color: white;
