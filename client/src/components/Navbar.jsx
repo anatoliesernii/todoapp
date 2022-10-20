@@ -18,7 +18,6 @@ const Navbar = (props) => {
    const [expandedMenu, setExpandedMenu] = useState(false);
    const openMenu = () => {
       setExpandedMenu(!expandedMenu);
-      console.log(expandedMenu);
    };
 
    const [timeNow, setTimeNow] = useState(new Date().toLocaleString());
@@ -47,80 +46,81 @@ const Navbar = (props) => {
          <div className="menu-toggler" onClick={openMenu}>
             {expandedMenu ? <GrClose /> : <GiHamburgerMenu />}
          </div>
-         {expandedMenu ? (
-            <Actions className="actions">
-               {props.user && (
-                  <>
-                     <CurrentList className="action">
-                        <BsCalendarDate />
-                        <span>{timeNow}</span>
-                     </CurrentList>
 
-                     <Lists className="action" onClick={openLists}>
-                        <span>My Lists</span>
-                        <MdOutlineKeyboardArrowDown />
-                        {expanded ? (
-                           <ListsBucket className="listbucket">
-                              {props.lists.length === 0 ? (
-                                 <>
-                                    {props.user.lists.map((list, index) => {
-                                       return (
-                                          <ListItem
-                                             key={index}
-                                             user={props.user}
-                                             list={list}
-                                             setLists={props.setLists}
-                                          />
-                                       );
-                                    })}
-                                 </>
-                              ) : (
-                                 <>
-                                    {props.lists.map((list, index) => {
-                                       return (
-                                          <ListItem
-                                             key={index}
-                                             user={props.user}
-                                             list={list}
-                                             setLists={props.setLists}
-                                          />
-                                       );
-                                    })}
-                                 </>
-                              )}
+         <Actions
+            className={`actions ${
+               expandedMenu ? "visible-menu" : "hidden-menu"
+            } `}
+         >
+            {props.user && (
+               <>
+                  <CurrentList className="action">
+                     <BsCalendarDate />
+                     <span>{timeNow}</span>
+                  </CurrentList>
 
-                              <li>
-                                 <Link to={"/user"}>
-                                    <MdOutlineAddToPhotos />
-                                    <span>Add List</span>
-                                 </Link>
-                              </li>
-                           </ListsBucket>
-                        ) : (
-                           " "
-                        )}
-                     </Lists>
+                  <Lists className="action" onClick={openLists}>
+                     <span>My Lists</span>
+                     <MdOutlineKeyboardArrowDown />
+                     {expanded ? (
+                        <ListsBucket className="listbucket">
+                           {props.lists.length === 0 ? (
+                              <>
+                                 {props.user.lists.map((list, index) => {
+                                    return (
+                                       <ListItem
+                                          key={index}
+                                          user={props.user}
+                                          list={list}
+                                          setLists={props.setLists}
+                                       />
+                                    );
+                                 })}
+                              </>
+                           ) : (
+                              <>
+                                 {props.lists.map((list, index) => {
+                                    return (
+                                       <ListItem
+                                          key={index}
+                                          user={props.user}
+                                          list={list}
+                                          setLists={props.setLists}
+                                       />
+                                    );
+                                 })}
+                              </>
+                           )}
 
-                     <li className="user-info">
-                        {props.user.googleImg ? (
-                           <img alt="" src={props.user.googleImg} />
-                        ) : (
-                           <MdAccountCircle />
-                        )}
-                        {/* <img alt="" src={props.user.googleImg} /> */}
+                           <li>
+                              <Link to={"/user"}>
+                                 <MdOutlineAddToPhotos />
+                                 <span>Add List</span>
+                              </Link>
+                           </li>
+                        </ListsBucket>
+                     ) : (
+                        " "
+                     )}
+                  </Lists>
 
-                        {props.user.displayName}
-                     </li>
+                  <li className="user-info">
+                     {props.user.googleImg ? (
+                        <img alt="" src={props.user.googleImg} />
+                     ) : (
+                        <MdAccountCircle />
+                     )}
+                     {/* <img alt="" src={props.user.googleImg} /> */}
 
-                     <Logout className="action" onClick={logout}>
-                        <span>Logout</span>
-                     </Logout>
-                  </>
-               )}
-            </Actions>
-         ) : (
-            ""
-         )}
+                     {props.user.displayName}
+                  </li>
+
+                  <Logout className="action" onClick={logout}>
+                     <span>Logout</span>
+                  </Logout>
+               </>
+            )}
+         </Actions>
       </HeaderWrapper>
    );
 };
@@ -144,6 +144,16 @@ const HeaderWrapper = styled.div`
          display: flex;
       }
    }
+
+   @media (max-width: 1023px) {
+      .visible-menu {
+         display: block;
+      }
+
+      .hidden-menu {
+         display: none;
+      }
+   }
 `;
 
 const Logo = styled(Link)`
@@ -158,7 +168,6 @@ const Logo = styled(Link)`
 `;
 
 const Actions = styled.ul`
-   list-style: none;
    display: flex;
    flex-direction: row;
    font-size: 22px;
