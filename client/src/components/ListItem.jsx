@@ -55,9 +55,9 @@ const ListItem = (props) => {
                   )} */}
                </Counter>
             </Link>
-            <span className="delete" onClick={deleteList}>
+            <Link to={"/user"} className="delete" onClick={deleteList}>
                <MdOutlineDeleteOutline />
-            </span>
+            </Link>
          </>
       </ListIndividualItem>
    );
