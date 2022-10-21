@@ -3,12 +3,9 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { IoIosArrowForward } from "react-icons/io";
 import { MdOutlineDeleteOutline } from "react-icons/md";
-import { GiPartyPopper } from "react-icons/gi";
 
 const ListItem = (props) => {
    const deleteList = () => {
-      // window.location.reload();
-      // e.preventDefault();
       fetch("/api/list", {
          method: "DELETE",
          headers: {
@@ -41,35 +38,43 @@ const ListItem = (props) => {
    };
 
    return (
-      <li className="list-item" onClick={props.closeAll}>
-         <Link to={`/user/${props.list.title}`}>
-            <IoIosArrowForward />
-            <span>{props.list.title}</span>
-            <Counter className="counter">
-               <span style={{ color: "green" }}>({getCompletedCount()}/</span>
-               <span>{props.list.items.length})</span>
-               {/* {getCompletedCount() === props.list.items.length ? (
-                  <GiPartyPopper className="full-tasks" />
-               ) : (
-                  ""
-               )} */}
-            </Counter>
-         </Link>
-         <span className="delete" onClick={deleteList}>
-            <MdOutlineDeleteOutline />
-         </span>
-      </li>
+      <ListIndividualItem className="list-item" onClick={props.closeAll}>
+         <>
+            <Link to={`/user/${props.list.title}`}>
+               <IoIosArrowForward />
+               <span className="list-title">{props.list.title}</span>
+               <Counter className="counter">
+                  <span style={{ color: "green" }}>
+                     ({getCompletedCount()}/
+                  </span>
+                  <span>{props.list.items.length})</span>
+                  {/* {getCompletedCount() === props.list.items.length ? (
+                     <GiPartyPopper className="full-tasks" />
+                  ) : (
+                     ""
+                  )} */}
+               </Counter>
+            </Link>
+            <span className="delete" onClick={deleteList}>
+               <MdOutlineDeleteOutline />
+            </span>
+         </>
+      </ListIndividualItem>
    );
 };
+
+const ListIndividualItem = styled.li`
+   .list-title {
+      width: 78%;
+      margin-right: 5px;
+      overflow-x: hidden;
+   }
+`;
 
 const Counter = styled.span`
    font-size: 15px;
    font-weight: 400;
    margin-left: 2px;
-
-   /* .full-tasks {
-      font-size: 15px;
-   } */
 `;
 
 export default ListItem;
