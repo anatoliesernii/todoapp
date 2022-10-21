@@ -247,6 +247,15 @@ const Actions = styled.ul`
       }
    }
 
+   .user-info {
+      img {
+         width: 40px;
+         height: 40px;
+         border-radius: 100%;
+         margin-right: 5px;
+      }
+   }
+
    @media (min-width: 1080px) {
       position: relative;
       top: 0;
