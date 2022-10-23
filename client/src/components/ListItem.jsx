@@ -23,7 +23,8 @@ const ListItem = (props) => {
             return res.json();
          })
          .then((resObject) => {
-            props.setLists(resObject.result.lists);
+            props.setUser(resObject.result);
+            sessionStorage.setItem("USER", JSON.stringify(resObject.result));
          })
          .catch((err) => {
             console.log(err);

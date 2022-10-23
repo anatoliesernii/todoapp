@@ -38,6 +38,8 @@ const Navbar = (props) => {
    }, []);
 
    const logout = () => {
+      // Manual Clear SessionStorage during logout.
+      sessionStorage.removeItem("USER");
       window.open(
          "https://todoapp-anatolie.herokuapp.com/auth/logout",
          "_self"
@@ -83,35 +85,17 @@ const Navbar = (props) => {
                            expandedLists ? "visible-lists" : "hidden-lists"
                         }`}
                      >
-                        {props.lists.length === 0 ? (
-                           <>
-                              {props.user.lists.map((list, index) => {
-                                 return (
-                                    <ListItem
-                                       key={index}
-                                       user={props.user}
-                                       list={list}
-                                       setLists={props.setLists}
-                                       closeAll={closeAll}
-                                    />
-                                 );
-                              })}
-                           </>
-                        ) : (
-                           <>
-                              {props.lists.map((list, index) => {
-                                 return (
-                                    <ListItem
-                                       key={index}
-                                       user={props.user}
-                                       list={list}
-                                       setLists={props.setLists}
-                                       closeAll={closeAll}
-                                    />
-                                 );
-                              })}
-                           </>
-                        )}
+                        {props.user.lists.map((list, index) => {
+                           return (
+                              <ListItem
+                                 key={index}
+                                 user={props.user}
+                                 list={list}
+                                 setUser={props.setUser}
+                                 closeAll={closeAll}
+                              />
+                           );
+                        })}
 
                         <li className="list-new-item" onClick={closeAll}>
                            <Link to={"/user"}>

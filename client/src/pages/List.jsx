@@ -5,11 +5,8 @@ import Item from "../components/Item";
 import _ from "lodash";
 
 const List = (props) => {
-   // const [newList, setNewList] = useState("");
-   // const [newItem, setNewItem] = useState({ name: "", status: false });
    const newList = useRef();
    const newItem = useRef();
-
    const [error, setError] = useState(null);
 
    const currentPath = useParams();
@@ -17,19 +14,10 @@ const List = (props) => {
 
    useEffect(() => {
       if (props.user && currentPath.listTitle) {
-         console.log("inside UseEffect for grabbing selected Index");
-
-         if (props.lists.length === 0) {
-            const selectedListIndex = props.user.lists.findIndex((list) => {
-               return list.title === currentPath.listTitle;
-            });
-            setcurrentIndex(selectedListIndex);
-         } else {
-            const selectedListIndex = props.lists.findIndex((list) => {
-               return list.title === currentPath.listTitle;
-            });
-            setcurrentIndex(selectedListIndex);
-         }
+         const selectedListIndex = props.user.lists.findIndex((list) => {
+            return list.title === currentPath.listTitle;
+         });
+         setcurrentIndex(selectedListIndex);
       }
    }, [currentPath.listTitle]);
 
@@ -54,7 +42,8 @@ const List = (props) => {
             return res.json();
          })
          .then((resObject) => {
-            props.setLists(resObject.result.lists);
+            props.setUser(resObject.result);
+            sessionStorage.setItem("USER", JSON.stringify(resObject.result));
          })
          .then((newItem.current.value = ""))
          .catch((err) => {
@@ -82,7 +71,8 @@ const List = (props) => {
             return res.json();
          })
          .then((resObject) => {
-            props.setLists(resObject.result.lists);
+            props.setUser(resObject.result);
+            sessionStorage.setItem("USER", JSON.stringify(resObject.result));
          })
          .catch((err) => {
             setError(err.message);
@@ -112,28 +102,14 @@ const List = (props) => {
                return res.json();
             })
             .then((resObject) => {
-               props.setLists(resObject.result.lists);
+               props.setUser(resObject.result);
+               sessionStorage.setItem("USER", JSON.stringify(resObject.result));
             });
       } catch (err) {
          setError(err);
          console.log(error);
       }
    };
-
-   // New item creation.
-   // function newItemData(e) {
-   //    const { value } = e.target;
-   //    setNewItem({
-   //       name: _.capitalize(value),
-   //       status: false,
-   //    });
-   // }
-
-   // // New List creation.
-   // function newListData(e) {
-   //    const { value } = e.target;
-   //    setNewList(_.capitalize(value));
-   // }
 
    const addNewList = (e) => {
       // window.location.reload();
@@ -155,7 +131,8 @@ const List = (props) => {
             return res.json();
          })
          .then((resObject) => {
-            props.setLists(resObject.result.lists);
+            props.setUser(resObject.result);
+            sessionStorage.setItem("USER", JSON.stringify(resObject.result));
          })
          .then((newList.current.value = ""))
          .catch((err) => {
@@ -175,35 +152,16 @@ const List = (props) => {
                </Box>
 
                <Box className="box box-items">
-                  {props.lists.length === 0 ? (
-                     <>
-                        {props.user.lists[currentIndex].items.map(
-                           (item, index) => {
-                              return (
-                                 <Item
-                                    key={index}
-                                    item={item}
-                                    handleCheckbox={handleCheckbox}
-                                    deleteItem={deleteItem}
-                                 />
-                              );
-                           }
-                        )}
-                     </>
-                  ) : (
-                     <>
-                        {props.lists[currentIndex].items.map((item, index) => {
-                           return (
-                              <Item
-                                 key={index}
-                                 item={item}
-                                 handleCheckbox={handleCheckbox}
-                                 deleteItem={deleteItem}
-                              />
-                           );
-                        })}
-                     </>
-                  )}
+                  {props.user.lists[currentIndex].items.map((item, index) => {
+                     return (
+                        <Item
+                           key={index}
+                           item={item}
+                           handleCheckbox={handleCheckbox}
+                           deleteItem={deleteItem}
+                        />
+                     );
+                  })}
 
                   <form className="item newitem">
                      <input

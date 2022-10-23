@@ -10,40 +10,46 @@ import Navbar from "./components/Navbar";
 
 export default function App() {
    const [user, setUser] = useState(null);
-   // const tester = user ? user.lists : [];
 
-   // const [lists, setLists] = useState(tester);
-   const [lists, setLists] = useState([]);
+   let sessionUser = sessionStorage.getItem("USER");
 
    useEffect(() => {
-      const getUser = () => {
-         fetch("https://todoapp-anatolie.herokuapp.com/auth/login/success", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-               Accept: "application/json",
-               "Content-Type": "application/json",
-               "Access-Control-Allow-Credentials": true,
-            },
+      if (!sessionUser) {
+         getUser();
+      }
+   });
+
+   useEffect(() => {
+      setUser(JSON.parse(sessionUser));
+   }, [sessionUser]);
+
+   const getUser = () => {
+      fetch("https://todoapp-anatolie.herokuapp.com/auth/login/success", {
+         method: "GET",
+         credentials: "include",
+         headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": true,
+         },
+      })
+         .then((res) => {
+            if (res.status === 200) return res.json();
+            throw new Error("Authentication failed.");
          })
-            .then((res) => {
-               if (res.status === 200) return res.json();
-               throw new Error("Authentication failed.");
-            })
-            .then((resObject) => {
-               setUser(resObject.user);
-            })
-            .catch((err) => {
-               console.log(err);
-            });
-      };
-      getUser();
-   }, []);
+         .then((resObject) => {
+            setUser(resObject.user);
+            sessionStorage.setItem("USER", JSON.stringify(resObject.user));
+         })
+         .catch((err) => {
+            console.log(err);
+         });
+   };
 
    return (
       <>
          <BrowserRouter>
-            <Navbar user={user} lists={lists} setLists={setLists} />
+            <Navbar user={user} setUser={setUser} />
             <Routes>
                <Route path="/" element={<Home user={user} />} />
 
@@ -57,17 +63,11 @@ export default function App() {
                   <>
                      <Route
                         path="/user"
-                        element={<List user={user} setLists={setLists} />}
+                        element={<List user={user} setUser={setUser} />}
                      />
                      <Route
                         path="/user/:listTitle"
-                        element={
-                           <List
-                              user={user}
-                              lists={lists}
-                              setLists={setLists}
-                           />
-                        }
+                        element={<List user={user} setUser={setUser} />}
                      />
                   </>
                )}
