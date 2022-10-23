@@ -15,36 +15,39 @@ export default function App() {
 
    useEffect(() => {
       if (!sessionUser) {
+         const getUser = () => {
+            fetch("https://todoapp-anatolie.herokuapp.com/auth/login/success", {
+               method: "GET",
+               credentials: "include",
+               headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Credentials": true,
+               },
+            })
+               .then((res) => {
+                  if (res.status === 200) return res.json();
+                  throw new Error("Authentication failed.");
+               })
+               .then((resObject) => {
+                  setUser(resObject.user);
+                  sessionStorage.setItem(
+                     "USER",
+                     JSON.stringify(resObject.user)
+                  );
+               })
+               .catch((err) => {
+                  console.log(err);
+               });
+         };
+
          getUser();
       }
-   });
+   }, []);
 
    useEffect(() => {
       setUser(JSON.parse(sessionUser));
    }, [sessionUser]);
-
-   const getUser = () => {
-      fetch("https://todoapp-anatolie.herokuapp.com/auth/login/success", {
-         method: "GET",
-         credentials: "include",
-         headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credentials": true,
-         },
-      })
-         .then((res) => {
-            if (res.status === 200) return res.json();
-            throw new Error("Authentication failed.");
-         })
-         .then((resObject) => {
-            setUser(resObject.user);
-            sessionStorage.setItem("USER", JSON.stringify(resObject.user));
-         })
-         .catch((err) => {
-            console.log(err);
-         });
-   };
 
    return (
       <>
