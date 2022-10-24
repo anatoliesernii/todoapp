@@ -5,6 +5,7 @@ import { FcLock } from "react-icons/fc";
 import { AiOutlineEye } from "react-icons/ai";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
+import { GrFacebook } from "react-icons/gr";
 
 const Home = (props) => {
    const SERVER_URL =
@@ -20,6 +21,9 @@ const Home = (props) => {
 
    const googleLogin = () => {
       window.open(`${SERVER_URL}/auth/google`, "_self");
+   };
+   const facebookLogin = () => {
+      window.open(`${SERVER_URL}/auth/facebook`, "_self");
    };
 
    return (
@@ -93,6 +97,10 @@ const Home = (props) => {
                   <Button className="google" onClick={googleLogin}>
                      <FcGoogle />
                      <span>Continue with Google</span>
+                  </Button>
+                  <Button className="facebook" onClick={facebookLogin}>
+                     <GrFacebook />
+                     <span>Continue with Facebook</span>
                   </Button>
                </div>
             </HomeWrapper>
