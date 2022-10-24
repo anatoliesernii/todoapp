@@ -3,7 +3,11 @@ import passport from "passport";
 import { UserModel } from "../models/user.js";
 
 const router = express.Router();
-const CLIENT_URL = "https://todoapp-anatolie.herokuapp.com";
+
+const CLIENT_URL =
+   process.env.ENV_STATUS === "development"
+      ? "http://localhost:3000"
+      : "https://todoapp-anatolie.herokuapp.com";
 
 router.get("/login/success", (req, res) => {
    if (req.user) {
@@ -68,7 +72,7 @@ router.post("/login", function (req, res) {
    req.login(loginUser, (err) => {
       if (err) {
          console.log(err);
-         res.redirect("http://localhost:3000/failedtolog"); // Add page here if user is not Registered. Prompt him to /register page component.
+         res.redirect(`${CLIENT_URL}/failedtolog`); // Add page here if user is not Registered. Prompt him to /register page component.
       } else {
          // If no errors and user is successfully logged in.
          // Now use passport.authenticate() with the type of 'local'.

@@ -5,8 +5,12 @@ import passport from "passport";
 import session from "express-session";
 import GoogleStrategy from "passport-google-oauth20";
 import FacebookStrategy from "passport-facebook";
-
 import { UserModel } from "./models/user.js";
+
+const SERVER_URL =
+   process.env.ENV_STATUS === "development"
+      ? "http://localhost:5000"
+      : "https://todoapp-anatolie.herokuapp.com";
 
 // The createStrategy() is responsible to setup passport-local LocalStrategy with the correct options.
 // https://www.npmjs.com/package/passport-local-mongoose
@@ -18,8 +22,7 @@ passport.use(
       {
          clientID: process.env.GOOGLE_CLIENT_ID,
          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-         callbackURL:
-            "https://todoapp-anatolie.herokuapp.com/auth/google/callback",
+         callbackURL: `${SERVER_URL}/auth/google/callback`,
       },
       function (accessToken, refreshToken, profile, cb) {
          UserModel.findOrCreate(

@@ -7,7 +7,11 @@ import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 
 const Home = (props) => {
-   const SERVER_URL = "https://todoapp-anatolie.herokuapp.com";
+   const SERVER_URL =
+      process.env.NODE_ENV === "development"
+         ? "http://localhost:5000"
+         : "https://todoapp-anatolie.herokuapp.com";
+
    const [hidden, setHidden] = useState(true);
 
    function handleHidden() {

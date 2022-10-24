@@ -14,6 +14,11 @@ import { Link } from "react-router-dom";
 import ListItem from "./ListItem";
 
 const Navbar = (props) => {
+   const SERVER_URL =
+      process.env.NODE_ENV === "development"
+         ? "http://localhost:5000"
+         : "https://todoapp-anatolie.herokuapp.com";
+
    const [expandedLists, setExpandedLists] = useState(false);
    const openLists = () => {
       setExpandedLists(!expandedLists);
@@ -40,10 +45,7 @@ const Navbar = (props) => {
    const logout = () => {
       // Manual Clear SessionStorage during logout.
       sessionStorage.removeItem("USER");
-      window.open(
-         "https://todoapp-anatolie.herokuapp.com/auth/logout",
-         "_self"
-      );
+      window.open(`${SERVER_URL}/auth/logout`, "_self");
    };
 
    return (

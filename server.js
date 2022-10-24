@@ -11,18 +11,23 @@ import { UserModel } from "./models/user.js";
 import "./passportSetup.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import authRouter from "./routes/auth.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-import authRouter from "./routes/auth.js";
 const app = express();
+
+const CLIENT_URL =
+   process.env.ENV_STATUS === "development"
+      ? "http://localhost:3000"
+      : "https://todoapp-anatolie.herokuapp.com";
 
 // Below give options to cors in order to be able to fetch data from React @App.js when fetching USER profile during '/auth/login/success.'
 app.use(
    cors({
       credentials: true,
-      origin: "https://todoapp-anatolie.herokuapp.com",
+      origin: `${CLIENT_URL}`,
    })
 );
 
@@ -45,7 +50,7 @@ app.use(
       saveUninitialized: false,
       // cookie: { secure: true }
       cookie: {
-         maxAge: 10 * 60 * 1000, //1min
+         maxAge: 50 * 60 * 1000, //1min
       },
    })
 );
@@ -55,8 +60,11 @@ app.use(passport.session()); // Set passport to use the build-in session() metho
 const port = process.env.PORT || 5000;
 
 // app.use(require("./routes/record"));
-// mongoose.connect("mongodb://localhost:27017/todolistv3DB");
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect(
+   process.env.ENV_STATUS === "development"
+      ? "mongodb://localhost:27017/todolistv3DB"
+      : process.env.MONGO_URL
+);
 
 // Requests
 

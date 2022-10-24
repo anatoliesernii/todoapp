@@ -9,14 +9,18 @@ import Navbar from "./components/Navbar";
 // import Notfound from "./components/Notfound";
 
 export default function App() {
-   const [user, setUser] = useState(null);
+   const SERVER_URL =
+      process.env.NODE_ENV === "development"
+         ? "http://localhost:5000"
+         : "https://todoapp-anatolie.herokuapp.com";
 
+   const [user, setUser] = useState(null);
    let sessionUser = sessionStorage.getItem("USER");
 
    useEffect(() => {
       if (!sessionUser) {
          const getUser = () => {
-            fetch("https://todoapp-anatolie.herokuapp.com/auth/login/success", {
+            fetch(`${SERVER_URL}/auth/login/success`, {
                method: "GET",
                credentials: "include",
                headers: {
