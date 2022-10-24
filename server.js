@@ -70,7 +70,7 @@ mongoose.connect(
 
 // Add Item to its corresponding list DONE!
 // # Remove forEach loop and bring listIndex instad of listTitle. ########################
-app.post("/api", (req, res) => {
+app.post("/api/item", (req, res) => {
    UserModel.findOne({ _id: req.body.userId }, (err, result) => {
       if (!err && result) {
          result.lists.forEach((list) => {
@@ -93,7 +93,7 @@ app.post("/api", (req, res) => {
 });
 
 // Delete Item from a List. DONE!
-app.delete("/api", (req, res) => {
+app.delete("/api/item", (req, res) => {
    const idx = req.body.listIndex;
 
    UserModel.findOne({ _id: req.body.userId }, (err, result) => {
@@ -114,7 +114,7 @@ app.delete("/api", (req, res) => {
 });
 
 // Toggle item checkbox in corresponding List. DONE!
-app.patch("/api", (req, res) => {
+app.patch("/api/item", (req, res) => {
    const idx = req.body.listIndex;
 
    UserModel.findOne({ _id: req.body.userId }, (err, result) => {

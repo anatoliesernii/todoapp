@@ -24,7 +24,7 @@ const List = (props) => {
    const addItem = (e) => {
       e.preventDefault();
 
-      fetch("/api", {
+      fetch("/api/item", {
          method: "POST",
          headers: {
             "Content-Type": "application/json",
@@ -53,7 +53,7 @@ const List = (props) => {
    };
 
    const deleteItem = (itemName) => {
-      fetch("/api", {
+      fetch("/api/item", {
          method: "DELETE",
          headers: { "Content-Type": "application/json" },
          body: JSON.stringify({
@@ -91,7 +91,7 @@ const List = (props) => {
       };
 
       try {
-         await fetch("/api", {
+         await fetch("/api/item", {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(patchedData),
@@ -128,7 +128,7 @@ const List = (props) => {
       };
 
       try {
-         await fetch("/api", {
+         await fetch("/api/item", {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(patchedData),
@@ -165,7 +165,7 @@ const List = (props) => {
       };
 
       try {
-         await fetch("/api", {
+         await fetch("/api/item", {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(patchedData),
