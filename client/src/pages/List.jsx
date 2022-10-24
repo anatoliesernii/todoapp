@@ -10,14 +10,14 @@ const List = (props) => {
    const [error, setError] = useState(null);
 
    const currentPath = useParams();
-   const [currentIndex, setcurrentIndex] = useState(-1);
+   const [currentListIndex, setcurrentListIndex] = useState(-1);
 
    useEffect(() => {
       if (props.user && currentPath.listTitle) {
          const selectedListIndex = props.user.lists.findIndex((list) => {
             return list.title === currentPath.listTitle;
          });
-         setcurrentIndex(selectedListIndex);
+         setcurrentListIndex(selectedListIndex);
       }
    }, [currentPath.listTitle]);
 
@@ -58,7 +58,7 @@ const List = (props) => {
          headers: { "Content-Type": "application/json" },
          body: JSON.stringify({
             userId: props.user._id,
-            listIndex: currentIndex,
+            listIndex: currentListIndex,
             itemName: itemName,
          }),
       })
@@ -84,7 +84,7 @@ const List = (props) => {
    const handleCheckbox = async (itemId, status) => {
       const patchedData = {
          userId: props.user._id,
-         listIndex: currentIndex,
+         listIndex: currentListIndex,
          itemId: itemId,
          status: status,
       };
@@ -98,6 +98,80 @@ const List = (props) => {
             .then((res) => {
                if (!res.ok) {
                   throw new Error("Failed to add item.");
+               }
+               return res.json();
+            })
+            .then((resObject) => {
+               props.setUser(resObject.result);
+               sessionStorage.setItem("USER", JSON.stringify(resObject.result));
+            });
+      } catch (err) {
+         setError(err);
+         console.log(error);
+      }
+   };
+
+   // Re-order UP functionality
+   const moveUpItem = async (itemId) => {
+      const selectedItemIndex = props.user.lists[
+         currentListIndex
+      ].items.findIndex((item) => {
+         return item._id === itemId;
+      });
+
+      const patchedData = {
+         userId: props.user._id,
+         listIndex: currentListIndex,
+         itemIndex: selectedItemIndex,
+         direction: "up",
+      };
+
+      try {
+         await fetch("/api", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(patchedData),
+         })
+            .then((res) => {
+               if (!res.ok) {
+                  throw new Error("Failed to Move UP item.");
+               }
+               return res.json();
+            })
+            .then((resObject) => {
+               props.setUser(resObject.result);
+               sessionStorage.setItem("USER", JSON.stringify(resObject.result));
+            });
+      } catch (err) {
+         setError(err);
+         console.log(error);
+      }
+   };
+
+   // Re-order DOWN functionality
+   const moveDownItem = async (itemId) => {
+      const selectedItemIndex = props.user.lists[
+         currentListIndex
+      ].items.findIndex((item) => {
+         return item._id === itemId;
+      });
+
+      const patchedData = {
+         userId: props.user._id,
+         listIndex: currentListIndex,
+         itemIndex: selectedItemIndex,
+         direction: "down",
+      };
+
+      try {
+         await fetch("/api", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(patchedData),
+         })
+            .then((res) => {
+               if (!res.ok) {
+                  throw new Error("Failed to Move Down item.");
                }
                return res.json();
             })
@@ -142,26 +216,30 @@ const List = (props) => {
 
    return (
       <>
-         {currentPath.listTitle && currentIndex !== -1 ? (
+         {currentPath.listTitle && currentListIndex !== -1 ? (
             // Check if path == '/user/:listTitle' otherwise path is '/user'
             // And if user is loaded before trying to render his list.
-            // CurrentIndex is the list location inside lists Array.
+            // CurrentListIndex is the list location inside lists Array.
             <ListWrapper className="list-wrapper">
                <Box className="box box-title">
                   <h1>{currentPath.listTitle}</h1>
                </Box>
 
                <Box className="box box-items">
-                  {props.user.lists[currentIndex].items.map((item, index) => {
-                     return (
-                        <Item
-                           key={index}
-                           item={item}
-                           handleCheckbox={handleCheckbox}
-                           deleteItem={deleteItem}
-                        />
-                     );
-                  })}
+                  {props.user.lists[currentListIndex].items.map(
+                     (item, index) => {
+                        return (
+                           <Item
+                              key={index}
+                              item={item}
+                              handleCheckbox={handleCheckbox}
+                              deleteItem={deleteItem}
+                              moveUpItem={moveUpItem}
+                              moveDownItem={moveDownItem}
+                           />
+                        );
+                     }
+                  )}
 
                   <form className="item newitem">
                      <input
@@ -288,11 +366,7 @@ const Box = styled.div`
          word-break: break-word;
          line-height: 1.35;
          padding: 15px 0;
-         width: 72%;
-
-         @media (min-width: 768px) {
-            width: 82%;
-         }
+         width: 100%;
       }
 
       .btn {
@@ -306,15 +380,6 @@ const Box = styled.div`
          cursor: pointer;
          width: 15px;
          height: 15px;
-      }
-
-      .btn-remove {
-         position: absolute;
-         right: 10px;
-         width: 20px;
-         height: 18px;
-         font-size: 16px;
-         border-radius: 5px;
       }
 
       .btn-add {

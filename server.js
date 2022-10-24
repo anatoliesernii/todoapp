@@ -119,17 +119,77 @@ app.patch("/api", (req, res) => {
 
    UserModel.findOne({ _id: req.body.userId }, (err, result) => {
       if (!err && result) {
-         result.lists[idx].items.map((item) => {
-            if (item._id == req.body.itemId) {
-               item.status = req.body.status;
-            }
-         });
-         result.save();
+         // Checkbox logic
+         if (req.body.status) {
+            result.lists[idx].items.map((item) => {
+               if (item._id == req.body.itemId) {
+                  item.status = req.body.status;
+               }
+            });
+            result.save();
 
-         console.log("Toggled status on item: " + req.body.itemId);
-         res.json({
-            result,
-         });
+            console.log("Toggled status on item: " + req.body.itemId);
+            res.json({
+               result,
+            });
+         }
+         // Move Down Logic
+         else if (req.body.direction === "down") {
+            const maxItemsIndex = result.lists[idx].items.length - 1;
+
+            if (req.body.itemIndex + 1 <= maxItemsIndex) {
+               const removed = result.lists[idx].items.splice(
+                  req.body.itemIndex,
+                  1
+               );
+
+               result.lists[idx].items.splice(
+                  req.body.itemIndex + 1,
+                  0,
+                  removed[0]
+               ); // Place back the item but +1 indexed.
+               result.save();
+
+               console.log(
+                  "Moved down item from old index: " + req.body.itemIndex
+               );
+               res.json({
+                  result,
+               });
+            } else {
+               console.log(
+                  "Failed to move down. Already on bottom of the list."
+               );
+            }
+         }
+         // Move Up Logic
+         else if (req.body.direction === "up") {
+            if (req.body.itemIndex - 1 >= 0) {
+               const removed = result.lists[idx].items.splice(
+                  req.body.itemIndex,
+                  1
+               );
+
+               result.lists[idx].items.splice(
+                  req.body.itemIndex - 1,
+                  0,
+                  removed[0]
+               ); // Place back the item but -1 indexed.
+
+               result.save();
+
+               console.log(
+                  "Moved up item from old index: " + req.body.itemIndex
+               );
+               res.json({
+                  result,
+               });
+            } else {
+               console.log(
+                  "Failed to move up first item. Already on top of the list."
+               );
+            }
+         }
       } else {
          console.log(err);
       }
