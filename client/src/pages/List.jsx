@@ -87,6 +87,7 @@ const List = (props) => {
          listIndex: currentListIndex,
          itemId: itemId,
          status: status,
+         action: "toggle-checkbox",
       };
 
       try {
@@ -123,7 +124,7 @@ const List = (props) => {
          userId: props.user._id,
          listIndex: currentListIndex,
          itemIndex: selectedItemIndex,
-         direction: "up",
+         action: "move-up",
       };
 
       try {
@@ -160,7 +161,7 @@ const List = (props) => {
          userId: props.user._id,
          listIndex: currentListIndex,
          itemIndex: selectedItemIndex,
-         direction: "down",
+         action: "move-down",
       };
 
       try {

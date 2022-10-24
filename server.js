@@ -119,8 +119,7 @@ app.patch("/api", (req, res) => {
 
    UserModel.findOne({ _id: req.body.userId }, (err, result) => {
       if (!err && result) {
-         // Checkbox logic
-         if (req.body.status) {
+         if (req.body.action === "toggle-checkbox") {
             result.lists[idx].items.map((item) => {
                if (item._id == req.body.itemId) {
                   item.status = req.body.status;
@@ -134,7 +133,7 @@ app.patch("/api", (req, res) => {
             });
          }
          // Move Down Logic
-         else if (req.body.direction === "down") {
+         else if (req.body.action === "move-down") {
             const maxItemsIndex = result.lists[idx].items.length - 1;
 
             if (req.body.itemIndex + 1 <= maxItemsIndex) {
@@ -163,7 +162,7 @@ app.patch("/api", (req, res) => {
             }
          }
          // Move Up Logic
-         else if (req.body.direction === "up") {
+         else if (req.body.action === "move-up") {
             if (req.body.itemIndex - 1 >= 0) {
                const removed = result.lists[idx].items.splice(
                   req.body.itemIndex,
