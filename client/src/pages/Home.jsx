@@ -98,7 +98,11 @@ const Home = (props) => {
                      <FcGoogle />
                      <span>Continue with Google</span>
                   </Button>
-                  <Button className="facebook" onClick={facebookLogin}>
+                  <Button
+                     className="facebook"
+                     onClick={facebookLogin}
+                     style={{ display: "none" }}
+                  >
                      <GrFacebook />
                      <span>Continue with Facebook</span>
                   </Button>
