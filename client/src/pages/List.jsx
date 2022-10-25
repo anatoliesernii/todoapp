@@ -255,7 +255,6 @@ const List = (props) => {
                         name="name"
                         placeholder="New Item"
                         autoComplete="off"
-                        required={true}
                         autoFocus={true}
                         ref={newItem}
                         // onChange={newItemData}
@@ -280,7 +279,6 @@ const List = (props) => {
                   <input
                      type="text"
                      placeholder="Title"
-                     required={true}
                      autoFocus={true}
                      ref={newList}
                      // onChange={newListData}
