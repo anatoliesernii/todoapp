@@ -23,7 +23,10 @@ const List = (props) => {
 
    const addItem = (e) => {
       e.preventDefault();
+      // Trim white spaces from both edges in order for empty strings to be === "".
+      newItem.current.value = newItem.current.value.trim();
 
+      if (newItem.current.value === "") return;
       fetch("/api/item", {
          method: "POST",
          headers: {
@@ -187,8 +190,12 @@ const List = (props) => {
    };
 
    const addNewList = (e) => {
-      // window.location.reload();
       e.preventDefault();
+      // Trim white spaces from both edges in order for empty strings to be === "".
+      newList.current.value = newList.current.value.trim();
+
+      if (newList.current.value === "") return;
+
       fetch("/api/list", {
          method: "POST",
          headers: {
