@@ -125,7 +125,7 @@ const HomeWrapper = styled.div`
       max-width: 400px;
       width: 100%;
       border-radius: 6px;
-      padding: 40px;
+      padding: 34px;
    }
 
    .welcome-title {
@@ -211,10 +211,10 @@ const HomeWrapper = styled.div`
       }
    }
 
-   .google {
+   .google,
+   .facebook {
       text-decoration: none;
 
-      /* div { */
       background-color: #e1e0e0;
       height: 50px;
       width: 100%;
@@ -230,7 +230,9 @@ const HomeWrapper = styled.div`
          font-size: 32px;
          margin-right: 10px;
       }
-      /* } */
+   }
+   .google + .facebook {
+      margin: 5px 0;
    }
 `;
 
