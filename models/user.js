@@ -14,6 +14,7 @@ export const userSchema = new mongoose.Schema({
    googleId: String,
    facebookId: String,
    googleImg: String,
+   facebookImg: String,
    mail: String,
    lists: [listSchema],
 });

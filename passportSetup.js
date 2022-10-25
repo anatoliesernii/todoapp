@@ -56,7 +56,7 @@ passport.use(
             {
                provider: profile.provider,
                facebookId: profile._json.id,
-               fullName: profile._json.name,
+               displayName: profile._json.name,
                mail: profile._json.email,
                // facebookImg: profile.photos[0].value, // can't use this cause image URL changes on every API call.
             },

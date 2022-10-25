@@ -104,9 +104,9 @@ router.get(
 );
 
 // Facebook Strategy
-router.get("/auth/facebook", passport.authenticate("facebook"));
+router.get("/facebook", passport.authenticate("facebook"));
 router.get(
-   "/auth/facebook/callback",
+   "/facebook/callback",
    passport.authenticate("facebook", { failureRedirect: "/login" }),
    (req, res) => {
       console.log("Facebook Login from user: " + req.user.displayName);
