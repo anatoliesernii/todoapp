@@ -11,7 +11,8 @@ const Home = (props) => {
    const SERVER_URL =
       process.env.NODE_ENV === "development"
          ? "http://localhost:5000"
-         : "https://todoapp-anatolie.herokuapp.com";
+         // : "https://todoapp-anatolie.herokuapp.com";
+         : "https://todoapp.webcrafters.gr";
 
    const [hidden, setHidden] = useState(true);
 

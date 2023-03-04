@@ -21,7 +21,8 @@ const app = express();
 const CLIENT_URL =
    process.env.ENV_STATUS === "development"
       ? "http://localhost:3000"
-      : "https://todoapp-anatolie.herokuapp.com";
+      // : "https://todoapp-anatolie.herokuapp.com";
+      : "https://todoapp.webcrafters.gr";
 
 // Below give options to cors in order to be able to fetch data from React @App.js when fetching USER profile during '/auth/login/success.'
 app.use(

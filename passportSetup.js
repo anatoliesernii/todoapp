@@ -10,7 +10,8 @@ import { UserModel } from "./models/user.js";
 const SERVER_URL =
    process.env.ENV_STATUS === "development"
       ? "http://localhost:5000"
-      : "https://todoapp-anatolie.herokuapp.com";
+      // : "https://todoapp-anatolie.herokuapp.com";
+      : "https://todoapp.webcrafters.gr";
 
 // The createStrategy() is responsible to setup passport-local LocalStrategy with the correct options.
 // https://www.npmjs.com/package/passport-local-mongoose

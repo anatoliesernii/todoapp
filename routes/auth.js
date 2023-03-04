@@ -7,7 +7,8 @@ const router = express.Router();
 const CLIENT_URL =
    process.env.ENV_STATUS === "development"
       ? "http://localhost:3000"
-      : "https://todoapp-anatolie.herokuapp.com";
+      // : "https://todoapp-anatolie.herokuapp.com";
+      : "https://todoapp.webcrafters.gr";
 
 router.get("/login/success", (req, res) => {
    if (req.user) {
